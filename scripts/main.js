@@ -157,6 +157,10 @@ function init() {
     $('#title').click(() => {
         location.reload();
     });
+
+    $('#nav-bar').children().click((event) => {
+        changePage($(event.target).attr('href'));
+    });
 }
 
 window.onload = init;
@@ -186,4 +190,8 @@ function scrollTransition() {
         left: 0,
         behavior: 'smooth'
     });
+}
+
+function changePage(href) {
+    $('#site-body').html(`<p>HELLO! - ${href}<\p>`);
 }
