@@ -19,11 +19,20 @@ class Player extends FloorBlock {
         this.animations = [];
         this.framesLeftOfAnimation = 0;
         
-        document.addEventListener('keydown', this.move.bind(this), false);
-        document.addEventListener('keyup', this.keyUp.bind(this), false);
-    }
+        // keyboard event listeners
+        document.addEventListener('keydown', this.handleKeyDown.bind(this), false);
+        document.addEventListener('keyup', this.handleKeyUp.bind(this), false);
 
-    move(event) {
+        // touch event listeners
+        document.addEventListener('touchstart', this.handleTouchStart.bind(this), false);        
+        document.addEventListener('touchmove', this.handleTouchMove.bind(this), false);
+
+        // touch control variables
+        this.xDown = null;                                                        
+        this.yDown = null;
+    };
+
+    handleKeyDown(event) {
         let keyCode = event.which;
         let rotVel = 0.1 * (Math.PI/2);
         let totAnimationFrames = (Math.PI/2) / rotVel;
@@ -62,9 +71,50 @@ class Player extends FloorBlock {
         this.isReadyToMove = false;
     };
 
-    keyUp() {
+    handleKeyUp() {
         this.keyHeldDown = false;
     };
+
+    getTouches(event) {
+        return event.touches ||             // browser API
+               event.originalEvent.touches; // jQuery
+    };
+
+    handleTouchStart(event) {
+          const firstTouch = this.getTouches(event)[0];                                      
+          this.xDown = firstTouch.clientX;                                      
+          this.yDown = firstTouch.clientY;                                      
+    };
+
+    handleTouchMove(event) {
+          if ( ! this.xDown || ! this.yDown ) {
+              return;
+          }
+      
+          let xUp = event.touches[0].clientX;                                    
+          let yUp = event.touches[0].clientY;
+      
+          let xDiff = this.xDown - xUp;
+          let yDiff = this.yDown - yUp;
+      
+          if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+              if ( xDiff > 0 ) {
+                  console.log('left');
+              } else {
+                  console.log('right');
+              }                       
+          } else {
+              if ( yDiff > 0 ) {
+                  console.log('up');
+              } else { 
+                  console.log('down');
+              }                                                                 
+          }
+          /* reset values */
+          this.xDown = null;
+          this.yDown = null;                                             
+    };
+
 
     animate(floor) {
         if (!this.isDead) {
