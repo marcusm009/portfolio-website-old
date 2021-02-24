@@ -193,5 +193,5 @@ function scrollTransition() {
 }
 
 function changePage(href) {
-    $('#site-body').html(`<p>HELLO! - ${href}<\p>`);
+    $('#site-body').load('screen/' + href.replace('#','') + '.html');
 }
