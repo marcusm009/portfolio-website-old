@@ -32,43 +32,51 @@ class Player extends FloorBlock {
         this.yDown = null;
     };
 
-    handleKeyDown(event) {
-        let keyCode = event.which;
+    move(direction) {
         let rotVel = 0.1 * (Math.PI/2);
         let totAnimationFrames = (Math.PI/2) / rotVel;
-        
-        if (this.isReadyToMove == true) {
-            // up
-            if (keyCode == 87 || keyCode == 38) {
+
+        if(this.isReadyToMove == true) {
+            if (direction == 'up') {
                 this.animations.push([() => {
                     this.position.x += this.speed/totAnimationFrames;
                     this.rotation.z -= rotVel;
                 }, totAnimationFrames]);
-            // down
-            } else if (keyCode == 83 || keyCode == 40) {
+            } else if (direction == 'down') {
                 this.animations.push([() => {
                     this.position.x -= this.speed/totAnimationFrames;
                     this.rotation.z += rotVel;
                 }, totAnimationFrames]);
-            // left
-            } else if (keyCode == 65 || keyCode == 37) {
+            } else if (direction == 'left') {
                 this.animations.push([() => {
                     this.position.z -= this.speed/totAnimationFrames;
                     this.rotation.x -= rotVel
                 }, totAnimationFrames]);
-            // right
-            } else if (keyCode == 68 || keyCode == 39) {
+            } else if (direction == 'right') {
                 this.animations.push([() => {
                     this.position.z += this.speed/totAnimationFrames;
                     this.rotation.x += rotVel;
                 }, totAnimationFrames]);
-            } else {
-                console.log('Key pressed: ' + keyCode);
-                return;
             }
+
+            this.isReadyToMove = false;
+        }
+    };
+
+    handleKeyDown(event) {
+        let keyCode = event.which;
+        if (keyCode == 87 || keyCode == 38) {
+            this.move('up');
+        } else if (keyCode == 83 || keyCode == 40) {
+            this.move('down');
+        } else if (keyCode == 65 || keyCode == 37) {
+            this.move('left');
+        } else if (keyCode == 68 || keyCode == 39) {
+            this.move('right');
+        } else {
+            console.log('Key pressed: ' + keyCode);
         }
         this.keyHeldDown = true;
-        this.isReadyToMove = false;
     };
 
     handleKeyUp() {
@@ -81,38 +89,38 @@ class Player extends FloorBlock {
     };
 
     handleTouchStart(event) {
-          const firstTouch = this.getTouches(event)[0];                                      
-          this.xDown = firstTouch.clientX;                                      
-          this.yDown = firstTouch.clientY;                                      
+        const firstTouch = this.getTouches(event)[0];                                      
+        this.xDown = firstTouch.clientX;                                      
+        this.yDown = firstTouch.clientY;                                      
     };
 
     handleTouchMove(event) {
-          if ( ! this.xDown || ! this.yDown ) {
-              return;
-          }
-      
-          let xUp = event.touches[0].clientX;                                    
-          let yUp = event.touches[0].clientY;
-      
-          let xDiff = this.xDown - xUp;
-          let yDiff = this.yDown - yUp;
-      
-          if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
-              if ( xDiff > 0 ) {
-                  console.log('left');
-              } else {
-                  console.log('right');
-              }                       
-          } else {
-              if ( yDiff > 0 ) {
-                  console.log('up');
-              } else { 
-                  console.log('down');
-              }                                                                 
-          }
-          /* reset values */
-          this.xDown = null;
-          this.yDown = null;                                             
+        if ( ! this.xDown || ! this.yDown ) {
+            return;
+        }
+
+        let xUp = event.touches[0].clientX;                                    
+        let yUp = event.touches[0].clientY;
+
+        let xDiff = this.xDown - xUp;
+        let yDiff = this.yDown - yUp;
+
+        if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+            if ( xDiff > 0 ) {
+                this.move('left');
+            } else {
+                this.move('right');
+            }                       
+        } else {
+            if ( yDiff > 0 ) {
+                this.move('up');
+            } else { 
+                this.move('down');
+            }                                                                 
+        }
+        /* reset values */
+        this.xDown = null;
+        this.yDown = null;                                             
     };
 
 

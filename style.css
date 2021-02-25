@@ -64,6 +64,13 @@ h1 {
     /* text-shadow: 2px 2px 5px white; */
 }
 
+@media screen and (min-width: 768px) {
+    #nav-bar > a#title {
+        padding-top: 1em;
+        top: 3em;
+    }
+}
+
 #canvas-container {
     width: 100%;
     height: 100%;
