@@ -64,10 +64,15 @@ h1 {
     /* text-shadow: 2px 2px 5px white; */
 }
 
-@media screen and (min-width: 768px) {
-    #nav-bar > a#title {
-        padding-top: 1em;
+@media screen and (max-aspect-ratio: 5/4) {
+    #nav-bar {
         top: 3em;
+    }
+    
+    #nav-bar > a#title {
+        top: 0;
+        left: 0;
+        background-color: rgba(64, 64, 64, 0.5);
     }
 }
 
