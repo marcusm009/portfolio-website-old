@@ -11,37 +11,57 @@ body {
     margin: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 h1 {
     font-family: fantasy;
 }
 
-#nav-bar {
-    position: fixed;
-    display: block;
-    color: white;
-    font-size: 40px;
+.top-bar {
     width: 100%;
-    line-height: 100%;
-    height: 3em;
     background-color: rgba(64, 64, 64, 0.5);
+}
+
+.top-bar > a {
+    color: white;
+    text-decoration: none;
+    font-size: 2rem;
+    font-family: fantasy;
+}
+
+#title-bar > a {
+    position: relative;
+    top: 1.25rem;
+    left: 2rem;
+    z-index: 2;
+    font-style: italic;
+}
+
+#title-bar > a:hover {
+    background-color: initial;
+    /* text-shadow: 2px 2px 5px white; */
+}
+
+#nav-bar {
+    position: -webkit-sticky;   
+    position: sticky;
+    display: block;
+    top: 0;
+    z-index: 1;
+    line-height: 100%;
     text-align: center;
-    z-index: 99;
 }
 
 #nav-bar > a {
     display: inline-flex;
     flex-direction: column;
-    padding: 1em;
-    padding-right: 2em;
-    padding-left: 2em;
+    padding: 2rem;
+    padding-right: 2rem;
+    padding-left: 2rem;
+    padding-bottom: 2rem;
     margin: 0;
     border-right:  2px solid rgba(32, 32, 32, 0.9);
-    text-decoration: none;
-    color: inherit;
-    font-family: fantasy;
 }
 
 #nav-bar > a.no-border {
@@ -52,24 +72,12 @@ h1 {
     background-color: rgba(64, 64, 64, 0.75);
 }
 
-#nav-bar > a#title {
-    position: fixed;
-    left: 2em;
-    padding: 1em;
-    font-style: italic;
-}
-
-#nav-bar > a#title:hover {
-    background-color: initial;
-    /* text-shadow: 2px 2px 5px white; */
-}
-
 @media screen and (max-aspect-ratio: 5/4) {
     #nav-bar {
-        top: 3em;
+        top: 3rem;
     }
     
-    #nav-bar > a#title {
+    #title-bar > a {
         top: 0;
         left: 0;
         background-color: rgba(64, 64, 64, 0.5);
@@ -82,8 +90,12 @@ h1 {
 }
 
 #site-body {
+    /* position: absolute; */
+    /* visibility: hidden; */
+    /* top: 4em; */
+    width: 100%;
     height: 200%;
     background-color: rgba(255, 255, 255, 0.75);
-    padding: 5em;
-    /* margin: 5em; */
+    z-index: 1;
+    /* overflow-y: auto; */
 }
