@@ -13,7 +13,7 @@ let screen;
 
 function init() {
 
-    console.log('VER: 0.03');
+    console.log('VER: 0.031');
 
     initialScreenWidth = window.innerWidth;
     initialScreenHeight = window.innerHeight;
