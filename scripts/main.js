@@ -82,7 +82,7 @@ function init() {
     // main animation loop
     let frame = 0;
     let playerAnimations = [];
-    let playerIsFalling = false;
+    let playerIsDead = false;
 
     const animate = () => {
         renderer.render(scene, camera);
@@ -91,6 +91,13 @@ function init() {
 
         frame += 1;
         requestAnimationFrame(animate);
+
+        if (player.isFalling && !playerIsDead) {
+            $('#site-body').css('display', 'inline');
+            // location.hash = 'about';
+            changePage(location.hash);
+            playerIsDead = true;
+        }
 
         if(frame == 2) {
             window.scrollTo(0,0);
