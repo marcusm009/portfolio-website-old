@@ -11,9 +11,12 @@ let initialScreenHeight;
 
 let screen;
 
-function init() {
-
+async function init() {
     console.log('VER: 0.04');
+
+    if (location.hash == '') {
+        location.hash = '#about';
+    }
 
     setupScene();
 
@@ -34,20 +37,17 @@ function init() {
     audioLoader.load('sounds/wooden-percussion-shot.ogg', function(buffer) {
         sound.setBuffer(buffer);
         sound.setLoop(false);
-        sound.setVolume(0.5);
+        sound.setVolume(1);
     });
 
     // add floor
     let floor = new Floor(
-        new THREE.Vector3(),
-        new THREE.Vector2(9,9),
-        new THREE.Vector3(),
         0.9,
-        0,
         colors=[0xacff78,0x292929],
         colorProb=[0,1],
         holes=[[-3,-3],[3,-3],[3,3]]
     )
+    await floor.loadTemplate('levels/about.tsv');
     floor.addToScene(scene);
 
     // add player
@@ -87,7 +87,7 @@ function init() {
 
         if(frame % 200 == 0) {
             // console.log(planet[0].getPositions());
-            // console.log(player.position);
+            console.log(player.position);
             // console.log(player.isFalling);
         }
     }

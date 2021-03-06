@@ -1,86 +1,55 @@
 class Floor {
-    constructor(position, dimensions, rotationAxis, scale, rotation, colors=[0xffffff], colorProb=[1], holes = []) {
-        this.blocks = [];
+    constructor(scale, colors=[0xffffff], colorProb=[1]) {
+        this.tiles = [];
 
-        this.position = position;
-        this.dimensions = dimensions;
-        this.rotationAxis = rotationAxis;
-        
         this.scale = scale;
-        this.rotation = rotation;
 
         this.colors = colors;
         this.colorProb = colorProb;
-        
-        this.holes = holes;
 
-        // document.addEventListener('keydown', this.move.bind(this), false);
+        this.dimensions = new THREE.Vector3(9,9);
+        this.position = new THREE.Vector3();
 
-        this.addFloor();
     }
 
-    move(event) {
-        let keyCode = event.which;
-        if (keyCode == 81) {
-            this.rotation.x += 5;
-        }
+    async loadTemplate(templatePath) {
+        await fetch(templatePath)
+        .then(res => res.text())
+        .then((template) => {
+            this.template = template.split('\n').map(row => row.split('\t'));
+            this.addTiles();
+        });
     };
 
-    addFloor() {
-        this.start = this.dimensions.clone().addScalar(-1).divideScalar(-2);
-        this.end = this.start.clone().multiplyScalar(-1);
-
-        for (let x = this.start.x; x <= this.end.x; x++) {
-            for (let z = this.start.y; z <= this.end.y; z++) {
-                let isHole = false;
-                for (let hole of this.holes) {
-                    if (x == hole[0] && z == hole[1]) {
-                        isHole = true;
-                        break;
-                    }
-                }
-                if (!isHole) {
-                    let cumulativeProb = 0;
-                    let color = 0xffffff;
-                    
-                    for (let i = 0; i < this.colorProb.length; i++) {
-                        cumulativeProb += this.colorProb[i];
-                        if (Math.random() < cumulativeProb) {
-                            color = this.colors[i];
-                            break;
-                        }
-
-                    }
-                    this.blocks.push(new FloorBlock(x + this.position.x, this.position.y, z + this.position.z, this.scale, color));
+    addTiles() {
+        for (let z = 0; z < this.template.length; z++) {
+            for (let x = 0; x < this.template[z].length; x++) {
+                if (this.template[z][x].toLowerCase() == 'x') {
+                    this.tiles.push(new Tile(x, z));
                 }
             }
         }
     }
 
     addToScene(scene) {
-        for (let block of this.blocks) {
-            scene.add(block);
+        for (let tile of this.tiles) {
+            scene.add(tile);
         }
     }
 
     hasBlockInLocation(x, z) {
-        if (x < this.start.x - .1 || x > this.end.x + .1 || z < this.start.y - .1  || z > this.end.y + .1) {
+        let xInt = Math.round(x);
+        let zInt = Math.round(z);
+        if (xInt < 0 || zInt < 0 || xInt >= this.template[0].length || zInt >= this.template.length) {
             return false;
         }
-        let holeFound = false;
-        for (let hole of this.holes) {
-            if (x == hole[0] && z == hole[1]) {
-                holeFound = true;
-                break;
-            }
-        }
-        return !holeFound;
+        return this.template[zInt][xInt].toLowerCase() == 'x';
     }
 
     getPositions() {
-        let positions = [];
-        for (let block of this.blocks) {
-            positions.push(block.position);
+        let positions  = [];
+        for (let tile of this.tiles) {
+            positions.push(tile.position);
         }
         return positions;
     }

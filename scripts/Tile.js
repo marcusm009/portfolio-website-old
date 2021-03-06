@@ -1,10 +1,10 @@
-class FloorBlock extends THREE.Mesh {
-    constructor(x, y, z, scale, color, multiplier=1) {
+class Tile extends THREE.Mesh {
+    constructor(x, z, y=0, scale=.9, color=0xffffff, multiplier=1) {
         let cubeGeometry = new THREE.BoxGeometry(scale, .5*scale, scale);
         let cubeMaterial = new THREE.MeshPhongMaterial();
         cubeMaterial.color = new THREE.Color(color);
         cubeMaterial.blending = THREE.NoBlending;
-        // cubeMaterial.wireframe = true;
+
         super(cubeGeometry, cubeMaterial);
         this.name = 'floor';
         this.multiplier = multiplier;
@@ -15,9 +15,6 @@ class FloorBlock extends THREE.Mesh {
     }
 
     getPosition() {
-        return [
-            (this.position.x) / this.multiplier,
-            (this.position.z) / this.multiplier
-        ]
+        return [this.position.x, this.position.z]
     }
 }
