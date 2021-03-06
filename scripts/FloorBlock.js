@@ -1,6 +1,6 @@
 class FloorBlock extends THREE.Mesh {
     constructor(x, y, z, scale, color, multiplier=1) {
-        let cubeGeometry = new THREE.BoxGeometry(scale, scale, scale);
+        let cubeGeometry = new THREE.BoxGeometry(scale, .5*scale, scale);
         let cubeMaterial = new THREE.MeshPhongMaterial();
         cubeMaterial.color = new THREE.Color(color);
         cubeMaterial.blending = THREE.NoBlending;
@@ -9,7 +9,7 @@ class FloorBlock extends THREE.Mesh {
         this.name = 'floor';
         this.multiplier = multiplier;
         this.position.x = x;
-        this.position.y = y;
+        this.position.y = y+.325*scale;
         this.position.z = z;
         this.color = color;
     }

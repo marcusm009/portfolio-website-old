@@ -1,6 +1,13 @@
-class Player extends FloorBlock {
-    constructor(x, z, multiplier=1) {
-        super(x, 0, z, 0.9, 0xff0000);
+class Player extends THREE.Mesh {
+    constructor(x, z, scale=0.9, color='red', multiplier=1) {
+        let cubeGeometry = new THREE.BoxGeometry(scale, scale, scale);
+        let cubeMaterial = new THREE.MeshPhongMaterial();
+        cubeMaterial.color = new THREE.Color(color);
+        cubeMaterial.blending = THREE.NoBlending;
+        // cubeMaterial.wireframe = true;
+        super(cubeGeometry, cubeMaterial);
+        
+        // super(x, 0, z, 0.9, 0xff0000);
         // super(x, 0, z, 0.9, 'purple');
 
         this.name = 'player';
@@ -59,6 +66,7 @@ class Player extends FloorBlock {
                 }, totAnimationFrames]);
             }
 
+            this.playSound = true;
             this.isReadyToMove = false;
         }
     };
@@ -95,7 +103,7 @@ class Player extends FloorBlock {
     };
 
     handleTouchMove(event) {
-        if ( ! this.xDown || ! this.yDown ) {
+        if (!this.xDown || !this.yDown) {
             return;
         }
 
@@ -105,14 +113,14 @@ class Player extends FloorBlock {
         let xDiff = this.xDown - xUp;
         let yDiff = this.yDown - yUp;
 
-        if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
-            if ( xDiff > 0 ) {
+        if (Math.abs(xDiff) > Math.abs(yDiff) ) {
+            if (xDiff > 0) {
                 this.move('left');
             } else {
                 this.move('right');
             }                       
         } else {
-            if ( yDiff > 0 ) {
+            if (yDiff > 0) {
                 this.move('up');
             } else { 
                 this.move('down');
@@ -136,6 +144,7 @@ class Player extends FloorBlock {
             this.checkReadyToFall(floor);
             this.checkReadyToMove();
         }
+        this.playSound = false;
     };
 
     removeCompletedAnimations() {
@@ -161,7 +170,8 @@ class Player extends FloorBlock {
         if (this.isFalling) {
             return;
         }
-        if (!floor.hasBlockInLocation(this.getPosition()[0], this.getPosition()[1])) {
+        if (!floor.hasBlockInLocation(this.position.x, this.position.z)) {
+            // if (!floor.hasBlockInLocation(this.getPosition()[0], this.getPosition()[1])) {
             this.isFalling = true;
             
             this.animations.push([() => {

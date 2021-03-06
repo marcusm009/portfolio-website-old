@@ -14,7 +14,7 @@ class Floor {
         
         this.holes = holes;
 
-        document.addEventListener('keydown', this.move.bind(this), false);
+        // document.addEventListener('keydown', this.move.bind(this), false);
 
         this.addFloor();
     }
