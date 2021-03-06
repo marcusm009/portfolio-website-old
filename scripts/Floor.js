@@ -1,6 +1,7 @@
 class Floor {
     constructor(scale, colors=[0xffffff], colorProb=[1]) {
         this.tiles = [];
+        this.goalTile = undefined;
 
         this.scale = scale;
 
@@ -27,6 +28,13 @@ class Floor {
                 if (this.template[z][x].toLowerCase() == 'x') {
                     this.tiles.push(new Tile(x, z));
                 }
+                else if (this.template[z][x].toLowerCase() == 'g') {
+                    if (this.goalTile != undefined) {
+                        console.log('ERROR: Multiple goal tiles! Please fix level template')
+                    }
+                    this.goalTile = new Tile(x, z, 0, .9, 0xffbd9e, 'goal');
+                    this.tiles.push(this.goalTile);
+                }
             }
         }
     }
@@ -37,13 +45,21 @@ class Floor {
         }
     }
 
-    hasBlockInLocation(x, z) {
+    getBlockInLocation(x, z) {
         let xInt = Math.round(x);
         let zInt = Math.round(z);
         if (xInt < 0 || zInt < 0 || xInt >= this.template[0].length || zInt >= this.template.length) {
-            return false;
+            return '';
         }
-        return this.template[zInt][xInt].toLowerCase() == 'x';
+        return this.template[zInt][xInt].toLowerCase();
+    }
+
+    hasBlockInLocation(x, z) {
+        return this.getBlockInLocation(x, z) == 'x';
+    }
+
+    hasGoalInLocation(x, z) {
+        return this.getBlockInLocation(x, z) == 'g';
     }
 
     getPositions() {
@@ -52,5 +68,9 @@ class Floor {
             positions.push(tile.position);
         }
         return positions;
+    }
+
+    completeLevel() {
+        this.goalTile.position.z = 100000;
     }
 }

@@ -141,6 +141,7 @@ class Player extends THREE.Mesh {
                 }
             }
             this.removeCompletedAnimations();        
+            this.checkReadyToWin(floor);
             this.checkReadyToFall(floor);
             this.checkReadyToMove();
         }
@@ -171,13 +172,19 @@ class Player extends THREE.Mesh {
             return;
         }
         if (!floor.hasBlockInLocation(this.position.x, this.position.z)) {
-            // if (!floor.hasBlockInLocation(this.getPosition()[0], this.getPosition()[1])) {
             this.isFalling = true;
             
             this.animations.push([() => {
                 this.position.y -= this.fallVelocity;
                 this.fallVelocity += this.gravity;
             }, totAnimationFrames]);
+        }
+    };
+
+    checkReadyToWin(floor) {
+        if (floor.hasGoalInLocation(this.position.x, this.position.z)) {
+            this.winner = true;
+            floor.completeLevel();
         }
     }
 
