@@ -1,4 +1,5 @@
-const CONTENT_SERVER_URL = "https://github.com/marcusm009/marcusm009.github.io/raw/main"
+// const CONTENT_SERVER_URL = "https://github.com/marcusm009/marcusm009.github.io/raw/main"
+const CONTENT_SERVER_URL = "https://media.githubusercontent.com/media/marcusm009/marcusm009.github.io/main"
 
 // global variables
 let renderer;
@@ -14,7 +15,7 @@ let initialScreenHeight;
 let screen;
 
 async function init() {
-    console.log('VER: 0.042');
+    console.log('VER: 0.044');
 
     if (location.hash == '') {
         location.hash = '#about';
