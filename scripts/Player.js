@@ -1,19 +1,15 @@
 class Player extends THREE.Mesh {
-    constructor(x, z, scale=0.9, color='red', multiplier=1) {
+    constructor(x, z, y=1, scale=0.9, color='red') {
         let cubeGeometry = new THREE.BoxGeometry(scale, scale, scale);
         let cubeMaterial = new THREE.MeshPhongMaterial();
         cubeMaterial.color = new THREE.Color(color);
         cubeMaterial.blending = THREE.NoBlending;
-        // cubeMaterial.wireframe = true;
         super(cubeGeometry, cubeMaterial);
         
-        // super(x, 0, z, 0.9, 0xff0000);
-        // super(x, 0, z, 0.9, 'purple');
-
         this.name = 'player';
-        this.multiplier = multiplier;
-        this.position.y += multiplier;
-        this.speed = multiplier;
+        this.position.x = x;
+        this.position.y = y;
+        this.position.z = z;
 
         this.gravity = 0.025;
         this.fallVelocity = 0;
@@ -39,31 +35,30 @@ class Player extends THREE.Mesh {
         this.yDown = null;
     };
 
-    move(direction) {
-        let rotVel = 0.1 * (Math.PI/2);
-        let totAnimationFrames = (Math.PI/2) / rotVel;
+    move(direction, framesPerRoll=10) {
+        let rotVel = (Math.PI/2) / framesPerRoll;
 
         if(this.isReadyToMove == true) {
             if (direction == 'up') {
                 this.animations.push([() => {
-                    this.position.x += this.speed/totAnimationFrames;
+                    this.position.x += 1/framesPerRoll;
                     this.rotation.z -= rotVel;
-                }, totAnimationFrames]);
+                }, framesPerRoll]);
             } else if (direction == 'down') {
                 this.animations.push([() => {
-                    this.position.x -= this.speed/totAnimationFrames;
+                    this.position.x -= 1/framesPerRoll;
                     this.rotation.z += rotVel;
-                }, totAnimationFrames]);
+                }, framesPerRoll]);
             } else if (direction == 'left') {
                 this.animations.push([() => {
-                    this.position.z -= this.speed/totAnimationFrames;
+                    this.position.z -= 1/framesPerRoll;
                     this.rotation.x -= rotVel
-                }, totAnimationFrames]);
+                }, framesPerRoll]);
             } else if (direction == 'right') {
                 this.animations.push([() => {
-                    this.position.z += this.speed/totAnimationFrames;
+                    this.position.z += 1/framesPerRoll;
                     this.rotation.x += rotVel;
-                }, totAnimationFrames]);
+                }, framesPerRoll]);
             }
 
             this.playSound = true;

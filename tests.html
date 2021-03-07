@@ -39,10 +39,50 @@
                                           ['x','x','x']];
                     testFloor.addTiles();
                     assert.equal(5, testFloor.tiles.length);
-                    console.log(testFloor.tiles);
                     assert.true(testFloor.tiles.every((tile) => {
                         return tile instanceof Tile;
                     }));
+                });
+                QUnit.test("Should determine when block is in location", (assert) => {
+                    let testFloor = new Floor(1);
+                    testFloor.template = [['x','','g'],   // columns represent x-coord
+                                          ['x','x','x']]; // rows represent z-coord
+                    testFloor.addTiles();
+                    assert.true(testFloor.hasBlockInLocation(1,1)); // regular block
+                    assert.false(testFloor.hasBlockInLocation(2,0)); // goal block
+                    assert.false(testFloor.hasBlockInLocation(-1,0)); // off-grid
+                    assert.false(testFloor.hasBlockInLocation(1,0)); // hole
+
+                });
+            });
+
+            QUnit.module("Player", () => {
+                QUnit.test("Should initialize and spawn in proper location/rotation", (assert) => {
+                    let testPlayer = new Player(1,0);
+                    assert.equal(1, testPlayer.position.x);
+                    assert.equal(0, testPlayer.position.z);
+                    
+                    assert.equal(0, testPlayer.rotation.x);
+                    assert.equal(0, testPlayer.rotation.y);
+                    assert.equal(0, testPlayer.rotation.z);
+                });
+                QUnit.test("Should add correct animation data on move", (assert) => {
+                    const TOT_ANIMATION_FRAMES = 5;
+                    
+                    let testPlayer = new Player(0,0);
+                    testPlayer.move('right', TOT_ANIMATION_FRAMES); // should move in +z direction
+                    
+                    let rollAnimationData = testPlayer.animations[0];
+                    let numAnimationFrames = rollAnimationData[1];
+                    assert.equal(TOT_ANIMATION_FRAMES, numAnimationFrames);
+                    
+                    let rollAnimationFn = rollAnimationData[0].bind(testPlayer);
+                    rollAnimationFn();
+                    assert.equal(0, testPlayer.position.x);
+                    assert.equal(1/TOT_ANIMATION_FRAMES, testPlayer.position.z);
+
+                    assert.equal((Math.PI/2) / TOT_ANIMATION_FRAMES, testPlayer.rotation.x);
+                    assert.equal(0, testPlayer.rotation.z);
                 });
             });
         </script>
