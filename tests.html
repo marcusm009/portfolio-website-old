@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>Test Suite</title>
+        <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.14.0.css">
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://threejs.org/build/three.min.js"></script>
+
+        <script src="scripts/main.js"></script>
+        <script src="scripts/Tile.js"></script>
+        <script src="scripts/Floor.js"></script>
+        <script src="scripts/Player.js"></script>
+        <script src="scripts/Screen.js"></script>
+
+        <script src="https://code.jquery.com/qunit/qunit-2.14.0.js"></script>
+
+        <script>
+            window.onload = function() {return;}
+
+            QUnit.module("Tile", () => {
+                QUnit.test("Should create tile at correct position", (assert) => {
+                    let testTile = new Tile(2,1);
+                    assert.equal(2, testTile.getPosition()[0]);
+                    assert.equal(1, testTile.getPosition()[1]);
+                });
+            });
+
+            QUnit.module("Floor", () => {
+                QUnit.test("Should properly initialize", (assert) => {
+                    let testFloor = new Floor(1);
+                    assert.expect(0);
+                });
+                QUnit.test("Should populate array with Tile objects", (assert) => {
+                    let testFloor = new Floor(1);
+                    testFloor.template = [['x','','g'],
+                                          ['x','x','x']];
+                    testFloor.addTiles();
+                    assert.equal(5, testFloor.tiles.length);
+                    console.log(testFloor.tiles);
+                    assert.true(testFloor.tiles.every((tile) => {
+                        return tile instanceof Tile;
+                    }));
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div id="qunit"></div>
+        <div id="qunit-fixture"></div>
+    </body>
+</html>

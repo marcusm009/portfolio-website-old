@@ -8,9 +8,6 @@ class Floor {
         this.colors = colors;
         this.colorProb = colorProb;
 
-        this.dimensions = new THREE.Vector3(9,9);
-        this.position = new THREE.Vector3();
-
     }
 
     async loadTemplate(templatePath) {

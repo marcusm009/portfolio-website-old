@@ -18,7 +18,7 @@ async function init() {
         location.hash = '#about';
     }
 
-    setupScene();
+    setupScene(window, document);
 
     let audioContext = new AudioContext();
     audioContext.resume().then(() => {
@@ -106,7 +106,7 @@ async function init() {
 window.onload = init;
 window.addEventListener('resize', onWindowResize, false);
 
-function setupScene() {
+function setupScene(window, document) {
     initialScreenWidth = window.innerWidth;
     initialScreenHeight = window.innerHeight;
 
