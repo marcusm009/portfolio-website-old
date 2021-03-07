@@ -1,3 +1,5 @@
+const CONTENT_SERVER_URL = "https://github.com/marcusm009/marcusm009.github.io/raw/main"
+
 // global variables
 let renderer;
 let cssRenderer;
@@ -12,7 +14,7 @@ let initialScreenHeight;
 let screen;
 
 async function init() {
-    console.log('VER: 0.041');
+    console.log('VER: 0.042');
 
     if (location.hash == '') {
         location.hash = '#about';
@@ -34,7 +36,7 @@ async function init() {
 
     // load a sound and set it as the Audio object's buffer
     const audioLoader = new THREE.AudioLoader();
-    audioLoader.load('sounds/wooden-percussion-shot.ogg', function(buffer) {
+    audioLoader.load(CONTENT_SERVER_URL + '/sounds/wooden-percussion-shot.ogg', function(buffer) {
         sound.setBuffer(buffer);
         sound.setLoop(false);
         sound.setVolume(1);
