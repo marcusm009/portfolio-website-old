@@ -108,6 +108,13 @@ class Player extends THREE.Mesh {
         let xDiff = this.xDown - xUp;
         let yDiff = this.yDown - yUp;
 
+        console.log(`xDiff: ${xDiff}`);
+        console.log(`yDiff: ${yDiff}`);
+        console.log(`atan: ${Math.atan(yDiff/xDiff)}`);
+        console.log(`atan2: ${Math.atan2(yDiff,xDiff)}`);
+        console.log(`angle: ${Math.atan2(yDiff,xDiff) * 180/Math.PI}`);
+
+
         if (Math.abs(xDiff) > Math.abs(yDiff) ) {
             if (xDiff > 0) {
                 this.move('left');
