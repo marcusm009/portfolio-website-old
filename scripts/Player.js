@@ -107,28 +107,22 @@ class Player extends THREE.Mesh {
 
         let xDiff = this.xDown - xUp;
         let yDiff = this.yDown - yUp;
-
-        console.log(`xDiff: ${xDiff}`);
-        console.log(`yDiff: ${yDiff}`);
-        console.log(`atan: ${Math.atan(yDiff/xDiff)}`);
-        console.log(`atan2: ${Math.atan2(yDiff,xDiff)}`);
-        console.log(`angle: ${Math.atan2(yDiff,xDiff) * 180/Math.PI}`);
-
-
-        if (Math.abs(xDiff) > Math.abs(yDiff) ) {
-            if (xDiff > 0) {
+        
+        if (xDiff != 0 && yDiff != 0) {
+            let angle = Math.atan2(yDiff,xDiff);
+            if (0 <= angle && angle < Math.PI/2) {
                 this.move('left');
-            } else {
-                this.move('right');
-            }                       
-        } else {
-            if (yDiff > 0) {
+            } else if (Math.PI/2 <= angle && angle <= Math.PI) {
                 this.move('up');
-            } else { 
+            } else if (-Math.PI <= angle && angle < -Math.PI/2) {
+                this.move('right');
+            } else if (-Math.PI/2 <= angle && angle < 0) {
                 this.move('down');
-            }                                                                 
+            } else {
+                console.log(`This should not happen - touch input angle: ${angle}`);
+            }
         }
-        /* reset values */
+
         this.xDown = null;
         this.yDown = null;                                             
     };

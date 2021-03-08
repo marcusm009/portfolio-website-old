@@ -14,7 +14,7 @@ let initialScreenHeight;
 let screen;
 
 async function init() { 
-    console.log('VER: 0.046');
+    console.log('VER: 0.05');
 
     if (location.hash == '') {
         location.hash = '#about';
