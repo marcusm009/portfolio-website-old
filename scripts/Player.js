@@ -14,25 +14,12 @@ class Player extends THREE.Mesh {
         this.gravity = 0.025;
         this.fallVelocity = 0;
         
-        this.keyHeldDown = false;
         this.isReadyToMove = true;
         this.isFalling = false;
         this.isDead = false;
         
         this.animations = [];
         this.framesLeftOfAnimation = 0;
-        
-        // keyboard event listeners
-        document.addEventListener('keydown', this.handleKeyDown.bind(this), false);
-        document.addEventListener('keyup', this.handleKeyUp.bind(this), false);
-
-        // touch event listeners
-        document.addEventListener('touchstart', this.handleTouchStart.bind(this), false);        
-        document.addEventListener('touchmove', this.handleTouchMove.bind(this), false);
-
-        // touch control variables
-        this.xDown = null;                                                        
-        this.yDown = null;
     };
 
     move(direction, framesPerRoll=10) {
@@ -66,68 +53,6 @@ class Player extends THREE.Mesh {
         }
     };
 
-    handleKeyDown(event) {
-        let keyCode = event.which;
-        if (keyCode == 87 || keyCode == 38) {
-            this.move('up');
-        } else if (keyCode == 83 || keyCode == 40) {
-            this.move('down');
-        } else if (keyCode == 65 || keyCode == 37) {
-            this.move('left');
-        } else if (keyCode == 68 || keyCode == 39) {
-            this.move('right');
-        } else {
-            console.log('Key pressed: ' + keyCode);
-        }
-        this.keyHeldDown = true;
-    };
-
-    handleKeyUp() {
-        this.keyHeldDown = false;
-    };
-
-    getTouches(event) {
-        return event.touches ||             // browser API
-               event.originalEvent.touches; // jQuery
-    };
-
-    handleTouchStart(event) {
-        const firstTouch = this.getTouches(event)[0];                                      
-        this.xDown = firstTouch.clientX;                                      
-        this.yDown = firstTouch.clientY;                                      
-    };
-
-    handleTouchMove(event) {
-        if (!this.xDown || !this.yDown) {
-            return;
-        }
-
-        let xUp = event.touches[0].clientX;                                    
-        let yUp = event.touches[0].clientY;
-
-        let xDiff = this.xDown - xUp;
-        let yDiff = this.yDown - yUp;
-        
-        if (xDiff != 0 && yDiff != 0) {
-            let angle = Math.atan2(yDiff,xDiff);
-            if (0 <= angle && angle < Math.PI/2) {
-                this.move('left');
-            } else if (Math.PI/2 <= angle && angle <= Math.PI) {
-                this.move('up');
-            } else if (-Math.PI <= angle && angle < -Math.PI/2) {
-                this.move('right');
-            } else if (-Math.PI/2 <= angle && angle < 0) {
-                this.move('down');
-            } else {
-                console.log(`This should not happen - touch input angle: ${angle}`);
-            }
-        }
-
-        this.xDown = null;
-        this.yDown = null;                                             
-    };
-
-
     animate(floor) {
         if (!this.isDead) {
             for (let i = 0; i < this.animations.length; i++) {
@@ -154,7 +79,7 @@ class Player extends THREE.Mesh {
     };
 
     checkReadyToMove() {
-        if (this.keyHeldDown == false && this.animations.length == 0 && this.isFalling == false) {
+        if (this.animations.length == 0 && this.isFalling == false) {
             this.rotation.set(0,0,0);
             this.position.round();
             this.isReadyToMove = true;

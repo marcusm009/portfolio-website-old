@@ -14,7 +14,7 @@ let initialScreenHeight;
 let screen;
 
 async function init() { 
-    console.log('VER: 0.05');
+    console.log('VER: 0.06');
 
     if (location.hash == '') {
         location.hash = '#about';
@@ -56,6 +56,8 @@ async function init() {
     let player = new Player(0,0);
     scene.add(player);
 
+    let controller = new Controller(document, camera, player);
+
     // main animation loop
     let frame = 0;
     let playerAnimations = [];
@@ -72,9 +74,7 @@ async function init() {
         }
 
         player.animate(floor);
-
-        frame += 1;
-        requestAnimationFrame(animate);
+        camera.animate();
 
         if (player.isFalling && !playerIsDead) {
             $('#site-body').css('display', 'inline');
@@ -92,6 +92,9 @@ async function init() {
             console.log(player.position);
             // console.log(player.isFalling);
         }
+
+        frame += 1;
+        requestAnimationFrame(animate);
     }
 
     animate();
@@ -113,47 +116,22 @@ function setupScene(window, document) {
     initialScreenHeight = window.innerHeight;
 
     scene = new THREE.Scene();
-    camera = new THREE.OrthographicCamera();
-
-    let zoom = 192;
-    let defaultCameraPos = THREE.Vector3(-1, 0.5, 0.75);
-
-    camera.left = window.innerWidth / -zoom;
-    camera.right = window.innerWidth / zoom;
-    camera.top = window.innerHeight / zoom;
-    camera.bottom = window.innerHeight / -zoom;
-
-    camera.near = -300;
-    camera.far = 1500;
-
-    camera.updateProjectionMatrix();
-
-    // create a render, sets the background color and the size
+    camera = new Camera(window);
     renderer = new THREE.WebGLRenderer({alpha: true});
-    // renderer.setClearColor(0x000000, 1);
     
-    // get container to contain three.js canvas.
     let container = document.getElementById('canvas-container');
     let w = container.offsetWidth;
     let h = container.offsetHeight;
     renderer.setSize(w, h);
     container.appendChild(renderer.domElement);
-    
-    // renderer.domElement.style.position = 'absolute';
-    // renderer.domElement.style.top = 0;    
     renderer.domElement.style.zIndex = 0;
-
-    // position and point the camera to the center of the scene
-    camera.position.set(-1, 4, 1);
     
     let focalPoint = scene.position.clone();
-    
     focalPoint.y += 3;
     camera.lookAt(focalPoint);
 
     let dirLight = new THREE.DirectionalLight();
     scene.add(dirLight);
-    // dirLight.position.set(-500, 200, 300);
     dirLight.position.set(-20,100,50);
 }
 
