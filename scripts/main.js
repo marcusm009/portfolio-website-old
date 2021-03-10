@@ -14,7 +14,7 @@ let initialScreenHeight;
 let screen;
 
 async function init() { 
-    console.log('VER: 0.08');
+    console.log('VER: 0.0.83');
 
     if (location.hash == '') {
         location.hash = '#about';
@@ -22,14 +22,18 @@ async function init() {
 
     setupScene(window, document);
 
-    let audioContext = new AudioContext();
-    audioContext.resume().then(() => {
-        console.log('Playback resumed successfully');
-    });
+    console.log('scene setup successful');
+
+    // let audioContext = new AudioContext();
+    // audioContext.resume().then(() => {
+    //     console.log('Playback resumed successfully');
+    // });
 
     // create an AudioListener and add it to the camera
     const listener = new THREE.AudioListener();
     camera.add(listener);
+
+    console.log('listener added');
 
     // create a global audio source
     const sound = new THREE.Audio(listener);
@@ -42,6 +46,8 @@ async function init() {
             sound.setVolume(1);
     });
 
+    console.log('audio loaded');
+
     // add floor
     let floor = new Floor(
         0.9,
@@ -51,6 +57,8 @@ async function init() {
     )
     await floor.loadTemplate('levels/about.tsv');
     floor.addToScene(scene);
+
+    console.log('floor added');
 
     // add player
     let player = new Player(floor.spawnTile.position.x, floor.spawnTile.position.z);
@@ -63,6 +71,7 @@ async function init() {
     let frame = 0;
 
     const animate = () => {
+        console.log('animation started');
         renderer.render(scene, camera);
 
         if(player.playSound) {
@@ -76,6 +85,7 @@ async function init() {
         camera.follow(player, .1);
 
         if (player.completionPending) {
+            player.completionPending = false;
             $('#site-body').css('display', 'inline');
             // location.hash = 'about';
             changePage(location.hash);
