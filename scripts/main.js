@@ -14,7 +14,7 @@ let initialScreenHeight;
 let screen;
 
 async function init() { 
-    console.log('VER: 0.075');
+    console.log('VER: 0.08');
 
     if (location.hash == '') {
         location.hash = '#about';
@@ -55,6 +55,7 @@ async function init() {
     // add player
     let player = new Player(floor.spawnTile.position.x, floor.spawnTile.position.z);
     scene.add(player);
+    camera.follow(player);
 
     let controller = new Controller(document, player);
 
@@ -72,7 +73,7 @@ async function init() {
         }
 
         player.animate(floor);
-        camera.follow(player);
+        camera.follow(player, .1);
 
         if (player.completionPending) {
             $('#site-body').css('display', 'inline');

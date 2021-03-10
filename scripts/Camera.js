@@ -14,8 +14,18 @@ class Camera extends THREE.OrthographicCamera {
         this.position.set(-1, 4, 1);
     };
 
-    follow(player) {
-        this.position.x = player.position.x;
-        this.position.z = player.position.z;
+    follow(player, maxSpeed=Number.MAX_SAFE_INTEGER) {
+        let xDiff = player.position.x - this.position.x;
+        let zDiff = player.position.z - this.position.z;
+
+        if (xDiff < 0)
+            this.position.x += Math.max(xDiff, -maxSpeed);  
+        else
+            this.position.x += Math.min(xDiff, maxSpeed);
+
+        if (zDiff < 0)
+            this.position.z += Math.max(zDiff, -maxSpeed);
+        else
+            this.position.z += Math.min(zDiff, maxSpeed);
     };
 }
