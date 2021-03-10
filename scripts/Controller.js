@@ -1,7 +1,6 @@
 class Controller {
-    constructor(document, camera, player) {
+    constructor(document, player) {
 
-        this.camera = camera;
         this.player = player;
 
         // keyboard event listeners
@@ -16,21 +15,16 @@ class Controller {
         this.yDown = null;
     }
 
-    move(dir) {
-        this.player.move(dir);
-        this.camera.move(dir);
-    };
-
     handleKeyDown(event) {
         let keyCode = event.which;
         if (keyCode == 87 || keyCode == 38) {
-            this.move('up');
+            this.player.move('up');
         } else if (keyCode == 83 || keyCode == 40) {
-            this.move('down');
+            this.player.move('down');
         } else if (keyCode == 65 || keyCode == 37) {
-            this.move('left');
+            this.player.move('left');
         } else if (keyCode == 68 || keyCode == 39) {
-            this.move('right');
+            this.player.move('right');
         } else {
             console.log('Key pressed: ' + keyCode);
         }
@@ -61,13 +55,13 @@ class Controller {
         if (xDiff != 0 && yDiff != 0) {
             let angle = Math.atan2(yDiff,xDiff);
             if (0 <= angle && angle < Math.PI/2) {
-                this.move('left');
+                this.player.move('left');
             } else if (Math.PI/2 <= angle && angle <= Math.PI) {
-                this.move('up');
+                this.player.move('up');
             } else if (-Math.PI <= angle && angle < -Math.PI/2) {
-                this.move('right');
+                this.player.move('right');
             } else if (-Math.PI/2 <= angle && angle < 0) {
-                this.move('down');
+                this.player.move('down');
             } else {
                 console.log(`This should not happen - touch input angle: ${angle}`);
             }
