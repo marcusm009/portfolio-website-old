@@ -11,12 +11,17 @@ class Player extends THREE.Mesh {
         this.position.y = y;
         this.position.z = z;
 
+        this.spawnPos = this.position.clone();
+
         this.gravity = 0.025;
         this.fallVelocity = 0;
         
         this.isReadyToMove = true;
         this.isFalling = false;
-        this.isDead = false;
+        this.completedLevel = false;
+
+        this.respawnPending = false;
+        this.completionPending = false;
         
         this.animations = [];
         this.framesLeftOfAnimation = 0;
@@ -54,17 +59,17 @@ class Player extends THREE.Mesh {
     };
 
     animate(floor) {
-        if (!this.isDead) {
-            for (let i = 0; i < this.animations.length; i++) {
-                if (this.animations[i][1] > 0) {
-                    this.animations[i][0].bind(this)();
-                    this.animations[i][1]--;
-                }
+        for (let i = 0; i < this.animations.length; i++) {
+            if (this.animations[i][1] > 0) {
+                this.animations[i][0].bind(this)();
+                this.animations[i][1]--;
             }
-            this.removeCompletedAnimations();        
-            this.checkReadyToWin(floor);
-            this.checkReadyToFall(floor);
-            this.checkReadyToMove();
+        }
+        this.removeCompletedAnimations();        
+        
+        if (this.animations.length == 0 && !this.completedLevel) {
+            this.getNextAction();
+            this.checkFloor(floor);
         }
         this.playSound = false;
     };
@@ -78,35 +83,40 @@ class Player extends THREE.Mesh {
         this.animations = newAnimations;
     };
 
-    checkReadyToMove() {
-        if (this.animations.length == 0 && this.isFalling == false) {
+    getNextAction() {
+        if (this.respawnPending) {
+            this.respawnPending = false;
+            this.respawn();
+        } else {
             this.rotation.set(0,0,0);
             this.position.round();
             this.isReadyToMove = true;
         }
     };
 
-    checkReadyToFall(floor) {        
-        let totAnimationFrames = 50;
-
-        if (this.isFalling) {
-            return;
-        }
-        if (!floor.hasBlockInLocation(this.position.x, this.position.z)) {
+    checkFloor(floor) {        
+        if (!floor.hasBlockInLocation(this.position.x, this.position.z)) { // fall
             this.isFalling = true;
             
             this.animations.push([() => {
                 this.position.y -= this.fallVelocity;
                 this.fallVelocity += this.gravity;
-            }, totAnimationFrames]);
+            }, 50]);
+
+            // complete level
+            if (floor.hasGoalInLocation(this.position.x, this.position.z)) {
+                this.completionPending = true;
+                floor.completeLevel();
+            // respawn once animation is finished
+            } else {
+                this.respawnPending = true;
+            }
         }
     };
 
-    checkReadyToWin(floor) {
-        if (floor.hasGoalInLocation(this.position.x, this.position.z)) {
-            this.winner = true;
-            floor.completeLevel();
-        }
-    }
+    respawn() {
+        this.fallVelocity = 0;
+        this.position.copy(this.spawnPos);
+    };
 
 }

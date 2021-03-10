@@ -14,7 +14,7 @@ let initialScreenHeight;
 let screen;
 
 async function init() { 
-    console.log('VER: 0.06');
+    console.log('VER: 0.07');
 
     if (location.hash == '') {
         location.hash = '#about';
@@ -53,15 +53,13 @@ async function init() {
     floor.addToScene(scene);
 
     // add player
-    let player = new Player(0,0);
+    let player = new Player(floor.spawnTile.position.x, floor.spawnTile.position.z);
     scene.add(player);
 
     let controller = new Controller(document, camera, player);
 
     // main animation loop
     let frame = 0;
-    let playerAnimations = [];
-    let playerIsDead = false;
 
     const animate = () => {
         renderer.render(scene, camera);
@@ -76,15 +74,11 @@ async function init() {
         player.animate(floor);
         camera.animate();
 
-        if (player.isFalling && !playerIsDead) {
+        if (player.completionPending) {
             $('#site-body').css('display', 'inline');
             // location.hash = 'about';
             changePage(location.hash);
-            playerIsDead = true;
-        }
-
-        if(frame == 2) {
-            window.scrollTo(0,0);
+            player.completedLevel = true;
         }
 
         if(frame % 200 == 0) {

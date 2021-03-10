@@ -25,6 +25,13 @@ class Floor {
                 if (this.template[z][x].toLowerCase() == 'x') {
                     this.tiles.push(new Tile(x, z));
                 }
+                else if (this.template[z][x].toLowerCase() == 's') {
+                    if (this.spawnTile != undefined) {
+                        console.log('ERROR: Multiple spawn tiles! Please fix level template')
+                    }
+                    this.spawnTile = new Tile(x, z, 0, .9, 0xd4d4d4, 'spawn');
+                    this.tiles.push(this.spawnTile);
+                }
                 else if (this.template[z][x].toLowerCase() == 'g') {
                     if (this.goalTile != undefined) {
                         console.log('ERROR: Multiple goal tiles! Please fix level template')
@@ -52,7 +59,7 @@ class Floor {
     }
 
     hasBlockInLocation(x, z) {
-        return this.getBlockInLocation(x, z) == 'x';
+        return ['x','s'].includes(this.getBlockInLocation(x, z));
     }
 
     hasGoalInLocation(x, z) {
