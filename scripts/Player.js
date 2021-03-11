@@ -27,6 +27,13 @@ class Player extends THREE.Mesh {
         this.framesLeftOfAnimation = 0;
     };
 
+    setController(controller) {
+        this.controller = controller;
+        this.controller.moveCallback = (dir) => {
+            this.move(dir);
+        };
+    };
+
     move(direction, framesPerRoll=10) {
         let rotVel = (Math.PI/2) / framesPerRoll;
 

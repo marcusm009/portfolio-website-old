@@ -1,4 +1,4 @@
-const CONTENT_SERVER_URL = "https://media.githubusercontent.com/media/marcusm009/marcusm009.github.io/main"
+// const CONTENT_SERVER_URL = "https://media.githubusercontent.com/media/marcusm009/marcusm009.github.io/main"
 
 // global variables
 let renderer;
@@ -14,7 +14,7 @@ let initialScreenHeight;
 let screen;
 
 async function init() { 
-    console.log('VER: 0.0.83');
+    console.log('VER: 0.0.90');
 
     if (location.hash == '') {
         location.hash = '#about';
@@ -22,31 +22,10 @@ async function init() {
 
     setupScene(window, document);
 
-    console.log('scene setup successful');
+    let audioManager = new AudioManager(window);
 
-    // let audioContext = new AudioContext();
-    // audioContext.resume().then(() => {
-    //     console.log('Playback resumed successfully');
-    // });
-
-    // create an AudioListener and add it to the camera
-    const listener = new THREE.AudioListener();
-    camera.add(listener);
-
-    console.log('listener added');
-
-    // create a global audio source
-    const sound = new THREE.Audio(listener);
-
-    // load a sound and set it as the Audio object's buffer
-    const audioLoader = new THREE.AudioLoader();
-    audioLoader.load(CONTENT_SERVER_URL + '/sounds/wooden-percussion-shot.ogg', function(buffer) {
-            sound.setBuffer(buffer);
-            sound.setLoop(false);
-            sound.setVolume(1);
-    });
-
-    console.log('audio loaded');
+    camera.add(audioManager.listener);
+    audioManager.loadSound('wooden-percussion-shot');
 
     // add floor
     let floor = new Floor(
@@ -58,27 +37,21 @@ async function init() {
     await floor.loadTemplate('levels/about.tsv');
     floor.addToScene(scene);
 
-    console.log('floor added');
-
     // add player
+    let controller = new Controller(document);
     let player = new Player(floor.spawnTile.position.x, floor.spawnTile.position.z);
+    player.setController(controller);
     scene.add(player);
     camera.follow(player);
-
-    let controller = new Controller(document, player);
 
     // main animation loop
     let frame = 0;
 
     const animate = () => {
-        console.log('animation started');
         renderer.render(scene, camera);
 
         if(player.playSound) {
-            if(sound.isPlaying) {
-                sound.stop();
-            }
-            sound.play();
+            audioManager.playSound('wooden-percussion-shot');
         }
 
         player.animate(floor);

@@ -1,8 +1,8 @@
 class Controller {
-    constructor(document, player) {
+    constructor(document) {
 
-        this.player = player;
-
+        this.moveCallback = (dir) => {console.log('Move callback never assigned');};
+        
         // keyboard event listeners
         document.addEventListener('keydown', this.handleKeyDown.bind(this), false);
 
@@ -18,13 +18,13 @@ class Controller {
     handleKeyDown(event) {
         let keyCode = event.which;
         if (keyCode == 87 || keyCode == 38) {
-            this.player.move('up');
+            this.moveCallback('up');
         } else if (keyCode == 83 || keyCode == 40) {
-            this.player.move('down');
+            this.moveCallback('down');
         } else if (keyCode == 65 || keyCode == 37) {
-            this.player.move('left');
+            this.moveCallback('left');
         } else if (keyCode == 68 || keyCode == 39) {
-            this.player.move('right');
+            this.moveCallback('right');
         } else {
             console.log('Key pressed: ' + keyCode);
         }
@@ -55,13 +55,13 @@ class Controller {
         if (xDiff != 0 && yDiff != 0) {
             let angle = Math.atan2(yDiff,xDiff);
             if (0 <= angle && angle < Math.PI/2) {
-                this.player.move('left');
+                this.moveCallback('left');
             } else if (Math.PI/2 <= angle && angle <= Math.PI) {
-                this.player.move('up');
+                this.moveCallback('up');
             } else if (-Math.PI <= angle && angle < -Math.PI/2) {
-                this.player.move('right');
+                this.moveCallback('right');
             } else if (-Math.PI/2 <= angle && angle < 0) {
-                this.player.move('down');
+                this.moveCallback('down');
             } else {
                 console.log(`This should not happen - touch input angle: ${angle}`);
             }
