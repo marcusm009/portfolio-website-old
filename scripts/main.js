@@ -1,5 +1,3 @@
-// const CONTENT_SERVER_URL = "https://media.githubusercontent.com/media/marcusm009/marcusm009.github.io/main"
-
 // global variables
 let renderer;
 let cssRenderer;
@@ -14,11 +12,11 @@ let initialScreenHeight;
 let screen;
 
 async function init() { 
-    console.log('VER: 0.0.90');
+    console.log('VER: 0.1.0');
 
-    if (location.hash == '') {
-        location.hash = '#about';
-    }
+    // if (location.hash == '') {
+    //     location.hash = '#about';
+    // }
 
     setupScene(window, document);
 
