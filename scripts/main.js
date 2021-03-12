@@ -10,7 +10,7 @@ let initialScreenHeight;
 let pageName
 
 async function init() { 
-    console.log('VER: 0.1.1');
+    console.log('VER: 0.1.2');
 
     pageName = window.location.pathname.split('/').pop().split('.html')[0];
 
@@ -33,7 +33,11 @@ async function init() {
 
     // add player
     let controller = new Controller(document);
-    let player = new Player(floor.spawnTile.position.x, floor.spawnTile.position.z);
+    let player;
+    if(pageName == 'projects')
+        player = new RectangularPrismPlayer(floor.spawnTile.position.x, floor.spawnTile.position.z);
+    else
+        player = new CubePlayer(floor.spawnTile.position.x, floor.spawnTile.position.z);
     player.setController(controller);
     scene.add(player);
     camera.follow(player);

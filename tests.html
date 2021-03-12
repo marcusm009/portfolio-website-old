@@ -10,10 +10,13 @@
         <script src="https://threejs.org/build/three.min.js"></script>
 
         <script src="scripts/main.js"></script>
+        <script src="scripts/Camera.js"></script>
+		<script src="scripts/Controller.js"></script>
+        <script src="scripts/AudioManager.js"></script>
         <script src="scripts/Tile.js"></script>
         <script src="scripts/Floor.js"></script>
-        <script src="scripts/Player.js"></script>
-        <script src="scripts/Screen.js"></script>
+		<script src="scripts/CubePlayer.js"></script>
+		<script src="scripts/RectangularPrismPlayer.js"></script>
 
         <script src="https://code.jquery.com/qunit/qunit-2.14.0.js"></script>
 
@@ -58,7 +61,7 @@
 
             QUnit.module("Player", () => {
                 QUnit.test("Should initialize and spawn in proper location/rotation", (assert) => {
-                    let testPlayer = new Player(1,0);
+                    let testPlayer = new CubePlayer(1,0);
                     assert.equal(1, testPlayer.position.x);
                     assert.equal(0, testPlayer.position.z);
                     
@@ -69,7 +72,7 @@
                 QUnit.test("Should add correct animation data on move", (assert) => {
                     const TOT_ANIMATION_FRAMES = 5;
                     
-                    let testPlayer = new Player(0,0);
+                    let testPlayer = new CubePlayer(0,0);
                     testPlayer.move('right', TOT_ANIMATION_FRAMES); // should move in +z direction
                     
                     let rollAnimationData = testPlayer.animations[0];

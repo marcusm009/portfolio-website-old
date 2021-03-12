@@ -1,6 +1,6 @@
-class Player extends THREE.Mesh {
-    constructor(x, z, y=1, scale=0.9, color='red') {
-        let cubeGeometry = new THREE.BoxGeometry(scale, scale, scale);
+class CubePlayer extends THREE.Mesh {
+    constructor(x, z, y=1, scale=[.9,.9,.9], color='red') {
+        let cubeGeometry = new THREE.BoxGeometry(scale[0], scale[1], scale[2]);
         let cubeMaterial = new THREE.MeshPhongMaterial();
         cubeMaterial.color = new THREE.Color(color);
         cubeMaterial.blending = THREE.NoBlending;
