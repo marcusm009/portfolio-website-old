@@ -1,7 +1,5 @@
 // global variables
 let renderer;
-let cssRenderer;
-
 let scene;
 let camera;
 let control;
@@ -9,14 +7,12 @@ let control;
 let initialScreenWidth;
 let initialScreenHeight;
 
-let screen;
+let pageName
 
 async function init() { 
-    console.log('VER: 0.1.0');
+    console.log('VER: 0.1.1');
 
-    // if (location.hash == '') {
-    //     location.hash = '#about';
-    // }
+    pageName = window.location.pathname.split('/').pop().split('.html')[0];
 
     setupScene(window, document);
 
@@ -32,7 +28,7 @@ async function init() {
         colorProb=[0,1],
         holes=[[-3,-3],[3,-3],[3,3]]
     )
-    await floor.loadTemplate('levels/about.tsv');
+    await floor.loadTemplate(`levels/${pageName}.tsv`);
     floor.addToScene(scene);
 
     // add player
@@ -57,10 +53,8 @@ async function init() {
 
         if (player.completionPending) {
             player.completionPending = false;
-            $('#site-body').css('display', 'inline');
-            // location.hash = 'about';
-            changePage(location.hash);
             player.completedLevel = true;
+            $('#site-body').css('display', 'inline');
         }
 
         if(frame % 200 == 0) {
@@ -85,7 +79,7 @@ async function init() {
 }
 
 window.onload = init;
-window.addEventListener('resize', onWindowResize, false);
+// window.addEventListener('resize', onWindowResize, false);
 
 function setupScene(window, document) {
     initialScreenWidth = window.innerWidth;
@@ -112,17 +106,9 @@ function setupScene(window, document) {
 }
 
 function onWindowResize() {
-
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-
     renderer.setSize(window.innerWidth, window.innerHeight);
-
-    console.log(screen.scale);
-    screen.scale.setX(window.innerWidth/initialScreenWidth);
-    screen.scale.setY(window.innerHeight/initialScreenHeight);
-
-    screen.reflow();
 }
 
 function scrollTransition() {
@@ -133,8 +119,4 @@ function scrollTransition() {
         left: 0,
         behavior: 'smooth'
     });
-}
-
-function changePage(href) {
-    $('#site-body').load('screen/' + href.replace('#','') + '.html');
 }
