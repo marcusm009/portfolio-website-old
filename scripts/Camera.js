@@ -1,5 +1,5 @@
 class Camera extends THREE.OrthographicCamera {
-    constructor(window, zoom=192) {
+    constructor(window, scene, zoom=250) {
         super();
         this.left = window.innerWidth / -zoom;
         this.right = window.innerWidth / zoom;
@@ -8,10 +8,12 @@ class Camera extends THREE.OrthographicCamera {
 
         this.near = -300;
         this.far = 1500;
-
+        this.focalPoint = scene.position.clone()
+        
         this.updateProjectionMatrix();
 
-        this.position.set(-1, 4, 1);
+        this.position.set(-1, 1, 1);
+        this.lookAt(this.focalPoint);
     };
 
     follow(player, maxSpeed=Number.MAX_SAFE_INTEGER) {

@@ -10,7 +10,7 @@ let initialScreenHeight;
 let pageName
 
 async function init() { 
-    console.log('VER: 0.1.4');
+    console.log('VER: 0.1.5');
 
     pageName = window.location.pathname.split('/').pop().split('.html')[0];
 
@@ -90,7 +90,7 @@ function setupScene(window, document) {
     initialScreenHeight = window.innerHeight;
 
     scene = new THREE.Scene();
-    camera = new Camera(window);
+    camera = new Camera(window, scene);
     renderer = new THREE.WebGLRenderer({alpha: true});
     
     let container = document.getElementById('canvas-container');
@@ -99,10 +99,6 @@ function setupScene(window, document) {
     renderer.setSize(w, h);
     container.appendChild(renderer.domElement);
     renderer.domElement.style.zIndex = 0;
-    
-    let focalPoint = scene.position.clone();
-    focalPoint.y += 3;
-    camera.lookAt(focalPoint);
 
     let dirLight = new THREE.DirectionalLight();
     scene.add(dirLight);
