@@ -10,7 +10,7 @@ let initialScreenHeight;
 let pageName
 
 async function init() { 
-    console.log('VER: 0.1.5');
+    console.log('VER: 0.1.6');
 
     pageName = window.location.pathname.split('/').pop().split('.html')[0];
 
@@ -58,7 +58,12 @@ async function init() {
         if (player.completionPending) {
             player.completionPending = false;
             player.completedLevel = true;
-            $('#site-body').css('display', 'block');
+            $('#site-body').toggleClass('fade');
+            setTimeout(() => {
+                $('#site-body').toggleClass('fade');
+                $('#site-body').toggleClass('active');
+                $('html').css('touch-action','auto')
+            }, 100);
         }
 
         if(frame % 200 == 0) {
