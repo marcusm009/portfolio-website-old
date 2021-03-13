@@ -10,7 +10,7 @@ let initialScreenHeight;
 let pageName
 
 async function init() { 
-    console.log('VER: 0.1.3');
+    console.log('VER: 0.1.4');
 
     pageName = window.location.pathname.split('/').pop().split('.html')[0];
 
