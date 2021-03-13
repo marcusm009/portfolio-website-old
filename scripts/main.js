@@ -10,7 +10,7 @@ let initialScreenHeight;
 let pageName
 
 async function init() { 
-    console.log('VER: 0.1.2');
+    console.log('VER: 0.1.3');
 
     pageName = window.location.pathname.split('/').pop().split('.html')[0];
 
@@ -58,7 +58,7 @@ async function init() {
         if (player.completionPending) {
             player.completionPending = false;
             player.completedLevel = true;
-            $('#site-body').css('display', 'inline');
+            $('#site-body').css('display', 'block');
         }
 
         if(frame % 200 == 0) {
